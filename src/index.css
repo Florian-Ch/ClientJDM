@@ -12,10 +12,14 @@ code {
     monospace;
 }
 
-btn btn-secondary{
-  background-color: rgba(0,0,255,1) !important;
+.btn.btn-secondary{
+  background-color: rgba(0,0,255,1);
+  width: 150px;
+  text-align: center;
 }
 
-btn btn-secondary active{
-  background-color: rgba(255,0,0,1) !important;
+.btn.btn-secondary:not(:disabled).active{
+  background-color: rgba(255,0,0,1);
+  text-align: center;
 }
+
