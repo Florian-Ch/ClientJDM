@@ -6,40 +6,50 @@ export default class Home extends Component {
   constructor(props){
     super(props)
 
-    var switch_sort = React.createRef()
+    this.switch_sort = React.createRef()
+    this.switch = this.switch.bind(this)
 
+    this.state = {toggle : false}
   }
 
-  onClickButton(){
-    console.log()
+  switch(){
+    if(!this.state.toggle)
+      this.switch_sort.current.textContent = "Tri alphabétique"
+    else
+      this.switch_sort.current.textContent = "Tri par poids"
+    this.setState({toggle : !this.state.toggle})
   }
 
   render() {
     return (
-      <div class="container">
-        <div class="raw"> {/* ligne de titre */}
+      <div className="container">
+        <div className="row"> {/* ligne de titre */}
           <h1>Client Jeux de mots</h1>
         </div>
 
-        <div class="raw"> {/* ligne des options */}
+        <div className="row"> {/* ligne des options */}
           {/*<Button name="test"/>*/}
-          <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroup-sizing-sm">Nombre d'entrées à afficher</span>
+          <div className="col">
+            <div className="input-group input-group-sm mb-3">
+              <div className="input-group-prepend">
+                <span className="input-group-text" id="inputGroup-sizing-sm">Nombre d'entrées à afficher</span>
+              </div>
+              <input type="text" className="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" style={{maxWidth:"50px"}}/>
             </div>
-            <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" style={{maxWidth:"50px"}}/>
           </div>
-          <div class="btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-secondary active">
-              <input type="checkbox" checked autocomplete="off"/> Tri par poids
-            </label>
+          <div className="col">
+            <div className="btn-group-toggle" data-toggle="buttons">
+              <label className="btn btn-secondary active" onClick={this.switch} ref={this.switch_sort}>
+                <input type="checkbox"/> Tri par poids
+              </label>
+            </div>
           </div>
         </div>
 
-        <div class="raw"> {/* ligne de barre de recherche */}
+        <div className="row"> {/* ligne de barre de recherche */}
           <SearchBar/>
         </div>
-        <div class="raw"> {/* ligne de résultats */}
+        <div className="row"> {/* ligne de résultats */}
         </div>
       </div>
     )

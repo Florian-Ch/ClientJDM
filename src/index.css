@@ -11,3 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+btn btn-secondary{
+  background-color: rgba(0,0,255,1) !important;
+}
+
+btn btn-secondary active{
+  background-color: rgba(255,0,0,1) !important;
+}
