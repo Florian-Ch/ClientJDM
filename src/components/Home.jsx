@@ -165,7 +165,7 @@ export default class Home extends Component {
     return (
       <div className="container">
         <div className="row"> {/* ligne de titre */}
-          <h1>Client Jeux de mots</h1>
+          <h1>Dictionnaire Jeux de mots</h1>
         </div>
 
         <div className="row"> {/* ligne des options */}

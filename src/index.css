@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #ffecb3;
 }
 
 code {
@@ -15,14 +16,21 @@ code {
 /* Partie options */
 
 .btn.btn-secondary{
-  background-color: rgba(0,0,255,1);
+  background-color: #e65100;
   width: 150px;
   text-align: center;
+  color: black;
 }
 
 .btn.btn-secondary:not(:disabled).active{
-  background-color: rgba(255,0,0,1);
+  background-color: #ffa726;
   text-align: center;
+  color: black;
+}
+
+.search_button{
+  background-color: #ffc107;
+  color: black;
 }
 
 /* Partie relations */
@@ -32,7 +40,7 @@ code {
   padding-left:5px;
   padding-right: 20px;
   padding-bottom: 5px;
-  background-color: aquamarine;
+  background-color: #ffc107;
   border: 5px solid black;
   border-top-right-radius: 20px;
 }

@@ -12,7 +12,7 @@ export default class Home extends Component {
           aria-describedby="basic-addon2"
         />
         <div className="input-group-append">
-          <button className="btn btn-outline-secondary" type="button">
+          <button className="btn btn-outline-secondary search_button" type="button">
             Rechercher
           </button>
         </div>
