@@ -191,13 +191,15 @@ export default class Home extends Component {
         </div>
 
         <div className="row"> {/* ligne de résultats */}
-          <div className="col" style={{maxWidth:"fit-content", minWidth:"fit-content"}}>
-            <div className="row">
+          <div className="col relations">
+            <div className="row relation_title">
               Relations à afficher
             </div>
-            {
-              this.state.relations.map( (r,i) => <Relation key={i} name = {r[1]} title = {r[2]}/> )
-            }
+            <div className="col relations_list">
+              {
+                this.state.relations.map( (r,i) => <Relation key={i} name = {r[1]} title = {r[2]}/> )
+              }
+            </div>
           </div>
           <div className="col">
             Résultats

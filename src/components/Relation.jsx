@@ -28,7 +28,7 @@ export default class Relation extends Component {
               <input type="checkbox" aria-label="relation_checkbox" defaultChecked ref={this.checkbox} />
             </div>
           </div>
-          <label className="form-control" >{this.state.name}</label>
+          <label className="form-control relation_label" >{this.state.name}</label>
         </div>
       </div>
     );

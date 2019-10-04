@@ -12,6 +12,8 @@ code {
     monospace;
 }
 
+/* Partie options */
+
 .btn.btn-secondary{
   background-color: rgba(0,0,255,1);
   width: 150px;
@@ -23,3 +25,43 @@ code {
   text-align: center;
 }
 
+/* Partie relations */
+
+.relations{
+  max-width:fit-content;
+  padding-left:5px;
+  padding-right: 20px;
+  padding-bottom: 5px;
+  background-color: aquamarine;
+  border: 5px solid black;
+  border-top-right-radius: 20px;
+}
+
+.relation_title{
+  padding-left: 30px;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 23px;
+  text-decoration: underline;
+  margin-bottom: 5px;
+}
+
+.relations_list{
+  max-width: fit-content;
+  min-width: fit-content;
+  padding-right: 20px;
+  height: 500px;
+  overflow: auto;
+}
+
+.relation_label{
+  padding-top: 0;
+  padding-bottom: 0;
+  font-family:"mv boli";
+}
+
+.relations_list .row .input-group{
+  display: -webkit-box;
+}
+
+/* Partie résultats */
