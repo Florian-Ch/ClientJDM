@@ -2,20 +2,25 @@ import React, { Component } from "react";
 
 export default class Relation extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
+      index: props.index,
       name: props.name,
-      title : props.title
-    };
+      title : props.title,
+      checked: props.checked,
+      handler: props.handler
+    }
 
     this.checkbox = React.createRef()
     this.check = this.check.bind(this)
   }
 
   check(p){
-    if(p.target.tagName != "INPUT"){
+    if(p.target.tagName !== "INPUT"){
       this.checkbox.current.checked = !this.checkbox.current.checked
+      this.setState({checked: this.checkbox.current.checked})
+      this.state.handler(this.state.index, this.checkbox.current.checked)
     }
   }
 
