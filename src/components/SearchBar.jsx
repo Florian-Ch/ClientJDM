@@ -7,16 +7,29 @@ export default class Home extends Component {
 
     this.state = {
       word: "",
-      relations: props.relations
+      relations: props.relations,
+      handler: props.handler
     }
     this.updateInputValue = this.updateInputValue.bind(this)
     this.onClick = this.onClick.bind(this)
   }
 
   async onClick() {
-    // let date = new Date()
-    // console.log(await API.getDefinitions(this.state.word), `${(new Date() - date) / 1000}s`)
-    console.log(this.state.relations)
+    let date = new Date()
+
+    // Get definitions
+    this.state.handler(await API.getDefinitions(this.state.word))
+
+    // Get relations
+    for (let i = 0; i < this.state.relations.length; i++) {
+        const rel = this.state.relations[i]
+        if(rel.checked) {
+            let data = await API.getRelations(this.state.word, rel.id)
+            this.state.handler(data)
+        }
+    }
+
+    console.log(`TIME: ${(new Date() - date) / 1000}s`)
   }
 
   updateInputValue(event) {

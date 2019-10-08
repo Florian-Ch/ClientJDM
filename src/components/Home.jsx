@@ -9,7 +9,9 @@ export default class Home extends Component {
     this.switch_sort = React.createRef()
     this.switch = this.switch.bind(this)
     this.handler = this.handler.bind(this)
+    this.handle_search = this.handle_search.bind(this)
     this.state = {
+      data: {outcoming_relations: [], incoming_relations: [], definitions: []},
       toggle : false,
       relations :[
         {id:0, name :"r_associated", title:"Il est demandé d'énumérer les termes les plus étroitement associés au mot cible... Ce mot vous fait penser à quoi ?", checked:true},
@@ -167,6 +169,23 @@ export default class Home extends Component {
     this.setState({relations})
   }
 
+  handle_search(res) {
+    if(res.data.definitions) {
+        this.setState({data: {
+            outcoming_relations: this.state.data.outcoming_relations,
+            incoming_relations: this.state.data.incoming_relations,
+            definitions: res.data.definitions
+        }})
+    } else {
+        let { outcoming_relations, incoming_relations } = this.state.data
+        this.setState({data: {
+            outcoming_relations: [...outcoming_relations, ...res.data.outcoming_relations],
+            incoming_relations: [...incoming_relations, ...res.data.incoming_relations],
+            definitions: this.state.data.definitions
+        }})
+    }
+  }
+
   render() {
     return (
       <div className="container">
@@ -193,7 +212,7 @@ export default class Home extends Component {
         </div>
 
         <div className="row"> {/* ligne de barre de recherche */}
-          <SearchBar relations={this.state.relations }/>
+          <SearchBar relations={this.state.relations } handler={this.handle_search}/>
         </div>
 
         <div className="row"> {/* ligne de résultats */}
@@ -207,6 +226,33 @@ export default class Home extends Component {
           </div>
           <div className="col">
             Résultats
+            <div>
+                <h1>Définitions : </h1>
+                <ul>
+                    {this.state.data.definitions.map(def =>
+                        <li>{def}</li>
+                    )}
+                </ul>
+            </div>
+
+            <div>
+                <h1>Relations sortantes</h1>
+                <ul>
+                    {this.state.data.outcoming_relations.map(rel =>
+                        <li>{rel}</li>
+                    )}
+                </ul>
+            </div>
+
+            <div>
+                <h1>Relations entrantes</h1>
+                <ul>
+                    {this.state.data.incoming_relations.map(rel =>
+                        <li>{rel}</li>
+                    )}
+                </ul>
+            </div>
+
           </div>
         </div>
       </div>
