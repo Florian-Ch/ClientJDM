@@ -1,3 +1,4 @@
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,7 +6,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #ffecb3;
+  background-color: #2d3848;
 }
 
 code {
@@ -13,63 +14,199 @@ code {
     monospace;
 }
 
-/* Partie options */
+/* Header */
+.navbar.navbar-expand-lg.navbar-dark.bg-dark {
+  background: #101010!important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .3rem 2rem;
+}
+@media screen and (max-width: 425px) {
+  .navbar.navbar-expand-lg.navbar-dark.bg-dark {
+    justify-content: center;
+    padding: .3rem 1rem;
+  }
 
-.btn.btn-secondary{
-  background-color: #e65100;
-  width: 150px;
-  text-align: center;
-  color: black;
+  .brand {
+    margin-right: 10px;
+  }
+}
+.brand {
+  flex: 0 1;
+}
+.brand #logo {
+  width: 50px;
+}
+#div-search {
+  flex: 1;
+  max-width: 80%;
+}
+.form-search {
+  display: flex;
+  width: 100%
+}
+.btn:focus {
+  box-shadow: none;
+}
+.input-search {
+  flex: 1;
+  height: 38px;
+}
+.btn.btn-search {
+  cursor: auto!important;
+  margin-right: 0;
+  border-radius: 0;
+  width: 100%;
+  text-align: left;
+}
+.btn.btn-valid-search {
+  border-radius: 0;
+  background: #2aa3cc;
+}
+.btn.btn-valid-search:hover {
+  background-color: #64c0df;
+}
+.btn.btn-search:focus + #suggestions{
+  display: block;
+}
+#suggestions {
+  display: none;
+  background: white;
+  z-index: 1001;
+  padding: 0;
+  position: relative;
+  list-style: none;
+}
+#suggestions li {
+  padding: 5px 12px;
+  cursor: pointer;
+}
+#suggestions li:hover {
+  background: #858585;
 }
 
-.btn.btn-secondary:not(:disabled).active{
-  background-color: #ffa726;
-  text-align: center;
-  color: black;
+/* ------------ MAIN ------------ */
+.main {
+  display: flex;
+  overflow: hidden;
 }
 
-.search_button{
-  background-color: #ffc107;
-  color: black;
+.main-container {
+  flex: 1;
+  background-color: #3a4556;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 0;
+  border: none;
+  box-shadow: 2px 2px 2px #0000007a;
 }
 
-/* Partie relations */
+/* ------------ SIDEBAR ------------ */
+.sidebar {
+  /* position: fixed; */
+  color: #fff;
+  margin: 10px;
+  background: #3a4556;
+  padding: 10px;
+  border-radius: 0;
+  border: none;
+  box-shadow: 2px 2px 2px #0000007a;
+}
+.limits span#limits-input,
+.limits input.form-control {
+  border-radius: 0;
+}
+.limits span#limits-input {
+  background-color: #2aa3cc;
+  border: 0;
+}
+.limits input.form-control {
+  box-shadow: none;
+}
+.limits {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.limits label {
+  flex: 1;
+  width: 100%;
+}
+.limits input {
+  width: min-content;
+  width: 60px;
+}
+.options {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+}
+.options>div {
+  margin: 5px;
+}
+.sorts label {
+  background-color: #2aa3cc;
+  width: 100%;
+  color: #495057;
+  border: none;
+  border-radius: 0;
+}
+.sorts label:hover,
+.sorts label.active:hover {
+  background-color: #64c0df!important;
+}
 
 .relations{
-  max-width:fit-content;
-  padding-left:5px;
-  padding-right: 20px;
-  padding-bottom: 5px;
-  background-color: #ffc107;
-  border: 5px solid black;
-  border-top-right-radius: 20px;
+  display: flex;
+  flex: 1;
+  padding: 5px;
+  background: #2d3848;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.relations-title {
+  text-align: center;
+}
+.relations-list {
+  width: 90%;
+  flex-shrink: 1;
+  overflow-y: scroll;
+}
+.relation {
+  width: 100%;
+  margin-bottom: 2px;
+}
+.relation:nth-last-child(-n+1) {
+  margin-bottom: 0;
+}
+.relation label {
+  background-color: #2aa3cc;
+  width: 100%;
+  border-radius: 0;
+  border: 0;
+}
+.relation label.focus {
+  box-shadow: none;
 }
 
-.relation_title{
-  padding-left: 30px;
-  font-style: italic;
-  font-weight: bold;
-  font-size: 23px;
-  text-decoration: underline;
-  margin-bottom: 5px;
+.relation label.active:hover {
+  background-color: #64c0df!important;
 }
 
-.relations_list{
-  max-width: fit-content;
-  min-width: fit-content;
-  padding-right: 20px;
-  height: 500px;
-  overflow: auto;
+::-webkit-scrollbar {
+  width: 5px
 }
 
-.relation_label{
-  padding-top: 0;
-  padding-bottom: 0;
-  font-family:"mv boli";
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 20px #202020
 }
 
-.relations_list .row .input-group{
-  display: -webkit-box;
+::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 50px #486694
 }
 
-/* Partie résultats */
+::-webkit-scrollbar-thumb:hover {
+  -webkit-box-shadow: inset 0 0 50px #577bb3
+}
