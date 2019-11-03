@@ -9,10 +9,10 @@ export default class Sidebar extends Component {
     this.state = {
       sort_weight: false,
       limits: '',
+      relations: props.relations,
       handle_limit: props.handle_limit,
       handle_sort: props.handle_sort,
-      handle_updateRelation: props.handle_updateRelation,
-      relations: props.relations
+      handle_updateRelation: props.handle_updateRelation
     };
 
     // References
@@ -97,11 +97,10 @@ export default class Sidebar extends Component {
               {this.state.relations.map((r, i) => (
                 <Relation
                   key={i}
+                  index={i}
                   name={r.name}
                   title={r.title}
-                  checked={r.checked}
                   handler={this.state.handle_updateRelation}
-                  index={i}
                 />
               ))}
             </div>

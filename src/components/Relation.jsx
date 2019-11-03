@@ -8,17 +8,22 @@ export default class Relation extends Component {
       index: props.index,
       name: props.name,
       title: props.title,
-      checked: props.checked,
-      handler: props.handler
+      handler: props.handler,
+      checked: true
     };
     // Bind
     this.check = this.check.bind(this);
-
+    // Reference
+    this.checkbox = React.createRef()
   }
 
   check() {
     let { checked } = this.state;
-
+    if(checked) {
+      this.checkbox.current.classList.add("active")
+    } else {
+      this.checkbox.current.classList.remove("active")
+    }
     this.setState({ checked: !checked });
     this.state.handler(this.state.index, !checked);
   }
@@ -27,14 +32,15 @@ export default class Relation extends Component {
     return (
       <div
         className="btn-group-toggle relation"
-        data-toggle="buttons"
         title={this.state.title}
       >
         <label
           className="btn btn-secondary"
           onClick={this.check}
+          ref={this.checkbox}
         >
-          <input type="checkbox"/> {this.state.name.slice(2)}
+          {/* <input type="checkbox"/> */}
+          {this.state.name.slice(2)}
         </label>
       </div>
     );

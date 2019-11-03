@@ -957,6 +957,7 @@ export default class Home extends Component {
   }
 
   handle_updateRelation(index, bool) {
+    console.log(bool)
     let { relations } = this.state;
     relations[index].checked = bool;
     this.setState({ relations });
@@ -989,9 +990,6 @@ export default class Home extends Component {
     }
   }
 
-  componentDidUpdate() {
-    console.log(this.state.limits, this.state.sort_weight)
-  }
 
   render() {
     return (
@@ -1003,11 +1001,9 @@ export default class Home extends Component {
         />
         <div className="main">
           <Sidebar
-            limits={this.state.limits}
-            handle_limit={this.handle_limit}
-            sort_weight={this.state.sort_weight}
-            handle_sort={this.handle_sort}
             relations={this.state.relations}
+            handle_limit={this.handle_limit}
+            handle_sort={this.handle_sort}
             handle_updateRelation={this.handle_updateRelation}
           />
           <div className="main-container">

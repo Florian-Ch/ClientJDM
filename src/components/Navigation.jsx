@@ -9,9 +9,7 @@ export default class Navigation extends Component {
 
     this.lastCall = 0;
     this.state = {
-      limits: props.limits,
       word: "",
-      relations: props.relations,
       handler: props.handler,
       suggestions: []
     };
@@ -35,14 +33,18 @@ export default class Navigation extends Component {
 
   async onClick() {
     // Clear suggestions
-    this.setState({suggestions: []})
+    this.setState({ suggestions: [] });
     // Get definitions
     this.state.handler(await API.getDefinitions(this.state.word));
     // Get relations
-    for (let i = 0; i < this.state.relations.length; i++) {
-      const rel = this.state.relations[i];
+    for (let i = 0; i < this.props.relations.length; i++) {
+      const rel = this.props.relations[i];
       if (rel.checked) {
-        let data = await API.getRelations(this.state.word, rel.id, this.state.limits);
+        let data = await API.getRelations(
+          this.state.word,
+          rel.id,
+          this.props.limits
+        );
         this.state.handler(data);
       }
     }
