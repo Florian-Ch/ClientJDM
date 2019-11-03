@@ -104,7 +104,7 @@ code {
 
 /* ------------ SIDEBAR ------------ */
 .sidebar {
-  /* position: fixed; */
+  position: relative;
   color: #fff;
   margin: 10px;
   background: #3a4556;

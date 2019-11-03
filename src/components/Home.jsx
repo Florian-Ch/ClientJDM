@@ -989,6 +989,10 @@ export default class Home extends Component {
     }
   }
 
+  componentDidUpdate() {
+    console.log(this.state.limits, this.state.sort_weight)
+  }
+
   render() {
     return (
       <div>

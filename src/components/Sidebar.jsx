@@ -8,7 +8,7 @@ export default class Sidebar extends Component {
 
     this.state = {
       sort_weight: false,
-      limits: props.limits,
+      limits: '',
       handle_limit: props.handle_limit,
       handle_sort: props.handle_sort,
       handle_updateRelation: props.handle_updateRelation,
@@ -39,8 +39,13 @@ export default class Sidebar extends Component {
   switch() {
     let { sort_weight } = this.state;
 
-    if (!sort_weight) this.switch_sort.current.textContent = "Tri alphabétique";
-    else this.switch_sort.current.textContent = "Tri par poids";
+    if (!sort_weight) {
+      this.switch_sort.current.textContent = "Tri alphabétique";
+      this.switch_sort.current.classList.add("active")
+    } else {
+      this.switch_sort.current.textContent = "Tri par poids";
+      this.switch_sort.current.classList.remove("active")
+    }
 
     this.setState({ sort_weight: !sort_weight });
     this.state.handle_sort(!sort_weight);
@@ -48,6 +53,7 @@ export default class Sidebar extends Component {
 
   onChangeLimit(event) {
     let { value } = event.target;
+    this.setState({limits: value})
     this.state.handle_limit(value);
   }
 
@@ -56,6 +62,7 @@ export default class Sidebar extends Component {
       <div className="sidebar">
         <h3>Options :</h3>
         <div className="options">
+
           <div className="limits">
             <div className="input-group">
               <div className="input-group-prepend">
@@ -64,7 +71,7 @@ export default class Sidebar extends Component {
                 </span>
               </div>
               <input
-                type="text"
+                type="number"
                 className="form-control"
                 value={this.state.limits}
                 onChange={this.onChangeLimit}
@@ -73,7 +80,7 @@ export default class Sidebar extends Component {
           </div>
 
           <div className="sorts">
-            <div className="btn-group-toggle" data-toggle="buttons">
+            <div className="btn-group-toggle">
               <label
                 className="btn btn-secondary"
                 onClick={this.switch}
