@@ -11,10 +11,11 @@ export default class Home extends Component {
     this.handle_search = this.handle_search.bind(this);
     this.handle_limit = this.handle_limit.bind(this);
     this.handle_sort = this.handle_sort.bind(this);
+    this.clear_search = this.clear_search.bind(this);
 
     // State
     this.state = {
-      limits: '',
+      limits: "",
       sort_weight: false,
       outcoming_relations: [],
       incoming_relations: [],
@@ -957,7 +958,7 @@ export default class Home extends Component {
   }
 
   handle_updateRelation(index, bool) {
-    console.log(bool)
+    console.log(bool);
     let { relations } = this.state;
     relations[index].checked = bool;
     this.setState({ relations });
@@ -971,11 +972,17 @@ export default class Home extends Component {
     this.setState({ sort_weight: value });
   }
 
+  clear_search() {
+    this.setState({
+      outcoming_relations: [],
+      incoming_relations: [],
+      definitions: []
+    });
+  }
+
   handle_search(res) {
     if (res.definitions) {
       this.setState({
-        outcoming_relations: this.state.outcoming_relations,
-        incoming_relations: this.state.incoming_relations,
         definitions: res.definitions
       });
     } else {
@@ -990,7 +997,6 @@ export default class Home extends Component {
     }
   }
 
-
   render() {
     return (
       <div>
@@ -998,6 +1004,7 @@ export default class Home extends Component {
           relations={this.state.relations}
           limits={this.state.limits}
           handler={this.handle_search}
+          clear={this.clear_search}
         />
         <div className="main">
           <Sidebar

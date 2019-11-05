@@ -11,7 +11,8 @@ export default class Navigation extends Component {
     this.state = {
       word: "",
       handler: props.handler,
-      suggestions: []
+      suggestions: [],
+      clear: props.clear
     };
 
     this.updateInputValue = this.updateInputValue.bind(this);
@@ -34,6 +35,7 @@ export default class Navigation extends Component {
   async onClick() {
     // Clear suggestions
     this.setState({ suggestions: [] });
+    this.state.clear();
     // Get definitions
     this.state.handler(await API.getDefinitions(this.state.word));
     // Get relations
