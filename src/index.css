@@ -67,7 +67,8 @@ code {
 .btn.btn-valid-search:hover {
   background-color: #64c0df;
 }
-.btn.btn-search:focus + #suggestions{
+.btn.btn-search:focus + #suggestions,
+#suggestions:hover {
   display: block;
 }
 #suggestions {
