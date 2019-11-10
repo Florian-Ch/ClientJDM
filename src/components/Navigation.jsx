@@ -14,25 +14,23 @@ export default class Navigation extends Component {
       suggestions: [],
       clear: props.clear
     };
-
+    // Bind
     this.updateInputValue = this.updateInputValue.bind(this);
     this.onClick = this.onClick.bind(this);
     this.debounce = this.debounce.bind(this);
+
+    // References
+    this.input = React.createRef();
   }
 
   componentDidMount() {
-    document.addEventListener("keyup", event => {
-      if (
-        this.state.word !== "" &&
-        event.key === "Enter" &&
-        event.target.id === "search-input"
-      )
-        this.onClick();
+    this.input.current.addEventListener("keyup", event => {
+      if (this.state.word !== "" && event.key === "Enter") this.onClick();
     });
   }
 
   componentWillUnmount() {
-    document.removeEventListener("keyup");
+    this.input.current.removeEventListener("keyup");
   }
 
   async onClick() {
@@ -61,7 +59,7 @@ export default class Navigation extends Component {
     if (value === 0) {
       this.setState({ word: event.target.innerText }, () => {
         this.onClick();
-      })
+      });
     } else {
       this.setState({ word: value });
       if (value.length >= 3) {
@@ -94,6 +92,7 @@ export default class Navigation extends Component {
                 onChange={this.updateInputValue}
                 value={this.state.word}
                 id="search-input"
+                ref={this.input}
               />
               <ul id="suggestions">
                 {this.state.suggestions.map((el, i) => (
