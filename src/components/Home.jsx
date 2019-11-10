@@ -17,6 +17,8 @@ export default class Home extends Component {
     this.state = {
       limits: "",
       sort_weight: false,
+      outcoming_relations_save: [],
+      incoming_relations_save: [],
       outcoming_relations: [],
       incoming_relations: [],
       definitions: [],
@@ -958,14 +960,34 @@ export default class Home extends Component {
   }
 
   handle_updateRelation(index, bool) {
-    console.log(bool);
     let { relations } = this.state;
     relations[index].checked = bool;
     this.setState({ relations });
   }
 
   handle_limit(value) {
+    value = parseInt(value);
     this.setState({ limits: value });
+    let { incoming_relations, outcoming_relations, incoming_relations_save, outcoming_relations_save } = this.state;
+    if (incoming_relations.length > 0 && outcoming_relations.length > 0) {
+
+      incoming_relations = [] // Reset
+      incoming_relations_save.forEach(el => {
+        if (value < el.length) incoming_relations.push(el.slice(0, value));
+        else incoming_relations.push(el);
+      });
+
+      outcoming_relations = [] // Reset
+      outcoming_relations_save.forEach(el => {
+        if (value < el.length) outcoming_relations.push(el.slice(0, value));
+        else outcoming_relations.push(el);
+      });
+
+      this.setState({
+        incoming_relations,
+        outcoming_relations
+      });
+    }
   }
 
   handle_sort(value) {
@@ -986,14 +1008,13 @@ export default class Home extends Component {
         definitions: res.definitions
       });
     } else {
-      let { outcoming_relations, incoming_relations } = this.state;
-      this.setState({
-        outcoming_relations: [
-          ...outcoming_relations,
-          ...res.outcoming_relations
-        ],
-        incoming_relations: [...incoming_relations, ...res.incoming_relations]
-      });
+      let { outcoming_relations, incoming_relations, incoming_relations_save, outcoming_relations_save } = this.state;
+      outcoming_relations_save.push(res.outcoming_relations)
+      incoming_relations_save.push(res.incoming_relations)
+
+      outcoming_relations.push(res.outcoming_relations);
+      incoming_relations.push(res.incoming_relations);
+      this.setState({ outcoming_relations, incoming_relations, outcoming_relations_save, incoming_relations_save });
     }
   }
 
@@ -1026,17 +1047,17 @@ export default class Home extends Component {
               <div>
                 <h3>Relations sortantes</h3>
                 <ul>
-                  {this.state.outcoming_relations.map(rel => (
-                    <li>{rel}</li>
-                  ))}
+                  {this.state.outcoming_relations.map(rel =>
+                    rel.map(el => <li>{el}</li>)
+                  )}
                 </ul>
               </div>
               <div>
                 <h3>Relations entrantes</h3>
                 <ul>
-                  {this.state.incoming_relations.map(rel => (
-                    <li>{rel}</li>
-                  ))}
+                  {this.state.incoming_relations.map(rel =>
+                    rel.map(el => <li>{el}</li>)
+                  )}
                 </ul>
               </div>
             </div>

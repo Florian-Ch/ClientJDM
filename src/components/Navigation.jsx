@@ -22,9 +22,12 @@ export default class Navigation extends Component {
 
   componentDidMount() {
     document.addEventListener("keyup", event => {
-      if (this.state.word !== "" && event.key === "Enter") {
+      if (
+        this.state.word !== "" &&
+        event.key === "Enter" &&
+        event.target.id === "search-input"
+      )
         this.onClick();
-      }
     });
   }
 
@@ -55,17 +58,22 @@ export default class Navigation extends Component {
   async updateInputValue(event) {
     let { value } = event.target;
 
-    if (value === 0) value = event.target.innerText;
-    this.setState({ word: value });
-    if (value.length >= 3) {
-      // Debounce function (wait 200ms between calls)
-      this.debounce(async () => {
-        let data = await API.getAutocomplete(value);
-        this.setState({ suggestions: data });
-      }, 200)();
-      this.setState({ last_update: Date.now() });
+    if (value === 0) {
+      this.setState({ word: event.target.innerText }, () => {
+        this.onClick();
+      })
     } else {
-      this.setState({ suggestions: [] });
+      this.setState({ word: value });
+      if (value.length >= 3) {
+        // Debounce function (wait 200ms between calls)
+        this.debounce(async () => {
+          let data = await API.getAutocomplete(value);
+          this.setState({ suggestions: data });
+        }, 200)();
+        this.setState({ last_update: Date.now() });
+      } else {
+        this.setState({ suggestions: [] });
+      }
     }
   }
 
@@ -85,6 +93,7 @@ export default class Navigation extends Component {
                 placeholder="Rechercher un mot..."
                 onChange={this.updateInputValue}
                 value={this.state.word}
+                id="search-input"
               />
               <ul id="suggestions">
                 {this.state.suggestions.map((el, i) => (
