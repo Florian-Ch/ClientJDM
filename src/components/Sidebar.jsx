@@ -8,7 +8,7 @@ export default class Sidebar extends Component {
 
     this.state = {
       sort_weight: false,
-      limits: '',
+      limits: "",
       relations: props.relations,
       handle_limit: props.handle_limit,
       handle_sort: props.handle_sort,
@@ -41,10 +41,10 @@ export default class Sidebar extends Component {
 
     if (!sort_weight) {
       this.switch_sort.current.textContent = "Tri alphabétique";
-      this.switch_sort.current.classList.add("active")
+      this.switch_sort.current.classList.add("active");
     } else {
       this.switch_sort.current.textContent = "Tri par poids";
-      this.switch_sort.current.classList.remove("active")
+      this.switch_sort.current.classList.remove("active");
     }
 
     this.setState({ sort_weight: !sort_weight });
@@ -53,7 +53,7 @@ export default class Sidebar extends Component {
 
   onChangeLimit(event) {
     let { value } = event.target;
-    this.setState({limits: value})
+    this.setState({ limits: value });
     this.state.handle_limit(value);
   }
 
@@ -62,7 +62,6 @@ export default class Sidebar extends Component {
       <div className="sidebar">
         <h3>Options :</h3>
         <div className="options">
-
           <div className="limits">
             <div className="input-group">
               <div className="input-group-prepend">
