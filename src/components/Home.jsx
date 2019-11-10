@@ -960,13 +960,30 @@ export default class Home extends Component {
   }
 
   handle_updateRelation(index, bool) {
-    let { relations, outcoming_relations, incoming_relations, outcoming_relations_save, incoming_relations_save, limits } = this.state;
+    let {
+      relations,
+      outcoming_relations,
+      incoming_relations,
+      outcoming_relations_save,
+      incoming_relations_save,
+      limits
+    } = this.state;
     relations[index].checked = bool;
+    limits = parseInt(limits); // Parse int
 
     // Update relations
-    if(outcoming_relations.length > 0) {
-      outcoming_relations[index] = bool ? outcoming_relations_save[index].slice(0, limits) : []
-      incoming_relations[index] = bool ? incoming_relations_save[index].slice(0, limits) : []
+    if (outcoming_relations.length > 0) {
+      if (bool) {
+        outcoming_relations[index] = limits
+          ? outcoming_relations_save[index].slice(0, limits)
+          : outcoming_relations_save[index];
+        incoming_relations[index] = limits
+          ? incoming_relations_save[index].slice(0, limits)
+          : incoming_relations_save[index];
+      } else {
+        outcoming_relations[index] = [];
+        incoming_relations[index] = [];
+      }
     }
     this.setState({ relations, incoming_relations, outcoming_relations });
   }
@@ -974,19 +991,27 @@ export default class Home extends Component {
   handle_limit(value) {
     value = parseInt(value);
     this.setState({ limits: value });
-    let { incoming_relations, outcoming_relations, incoming_relations_save, outcoming_relations_save } = this.state;
+    let {
+      incoming_relations,
+      outcoming_relations,
+      incoming_relations_save,
+      outcoming_relations_save
+    } = this.state;
     if (incoming_relations.length > 0 && outcoming_relations.length > 0) {
-
-      incoming_relations = [] // Reset
-      incoming_relations_save.forEach(el => {
-        if (value < el.length) incoming_relations.push(el.slice(0, value));
-        else incoming_relations.push(el);
+      incoming_relations = []; // Reset
+      incoming_relations_save.forEach((el, i) => {
+        if (this.state.relations[i].checked) {
+          if (value < el.length) incoming_relations.push(el.slice(0, value));
+          else incoming_relations.push(el);
+        } else incoming_relations.push([]);
       });
 
-      outcoming_relations = [] // Reset
-      outcoming_relations_save.forEach(el => {
-        if (value < el.length) outcoming_relations.push(el.slice(0, value));
-        else outcoming_relations.push(el);
+      outcoming_relations = []; // Reset
+      outcoming_relations_save.forEach((el, i) => {
+        if (this.state.relations[i].checked) {
+          if (value < el.length) outcoming_relations.push(el.slice(0, value));
+          else outcoming_relations.push(el);
+        } else outcoming_relations.push([]);
       });
 
       this.setState({
@@ -1014,13 +1039,23 @@ export default class Home extends Component {
         definitions: res.definitions
       });
     } else {
-      let { outcoming_relations, incoming_relations, incoming_relations_save, outcoming_relations_save } = this.state;
-      outcoming_relations_save.push(res.outcoming_relations)
-      incoming_relations_save.push(res.incoming_relations)
+      let {
+        outcoming_relations,
+        incoming_relations,
+        incoming_relations_save,
+        outcoming_relations_save
+      } = this.state;
+      outcoming_relations_save.push(res.outcoming_relations);
+      incoming_relations_save.push(res.incoming_relations);
 
       outcoming_relations.push(res.outcoming_relations);
       incoming_relations.push(res.incoming_relations);
-      this.setState({ outcoming_relations, incoming_relations, outcoming_relations_save, incoming_relations_save });
+      this.setState({
+        outcoming_relations,
+        incoming_relations,
+        outcoming_relations_save,
+        incoming_relations_save
+      });
     }
   }
 
