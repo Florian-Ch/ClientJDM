@@ -960,9 +960,15 @@ export default class Home extends Component {
   }
 
   handle_updateRelation(index, bool) {
-    let { relations } = this.state;
+    let { relations, outcoming_relations, incoming_relations, outcoming_relations_save, incoming_relations_save, limits } = this.state;
     relations[index].checked = bool;
-    this.setState({ relations });
+
+    // Update relations
+    if(outcoming_relations.length > 0) {
+      outcoming_relations[index] = bool ? outcoming_relations_save[index].slice(0, limits) : []
+      incoming_relations[index] = bool ? incoming_relations_save[index].slice(0, limits) : []
+    }
+    this.setState({ relations, incoming_relations, outcoming_relations });
   }
 
   handle_limit(value) {
