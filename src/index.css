@@ -90,7 +90,7 @@ code {
 /* ------------ MAIN ------------ */
 .main {
   display: flex;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .main-container {
@@ -105,7 +105,10 @@ code {
 
 /* ------------ SIDEBAR ------------ */
 .sidebar {
-  position: relative;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 10px;
+  height: fit-content;
   color: #fff;
   margin: 10px;
   background: #3a4556;
