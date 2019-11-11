@@ -7,7 +7,7 @@ export default class Sidebar extends Component {
     super(props);
 
     this.state = {
-      sort_weight: false,
+      sort_weight: true,
       limits: "",
       relations: props.relations,
       handle_limit: props.handle_limit,
@@ -39,7 +39,7 @@ export default class Sidebar extends Component {
   switch() {
     let { sort_weight } = this.state;
 
-    if (!sort_weight) {
+    if (sort_weight) {
       this.switch_sort.current.textContent = "Tri alphabétique";
       this.switch_sort.current.classList.add("active");
     } else {

@@ -998,21 +998,22 @@ export default class Home extends Component {
       outcoming_relations_save
     } = this.state;
     if (incoming_relations.length > 0 && outcoming_relations.length > 0) {
-      incoming_relations = []; // Reset
-      incoming_relations_save.forEach((el, i) => {
-        if (this.state.relations[i].checked) {
-          if (value < el.length) incoming_relations.push(el.slice(0, value));
-          else incoming_relations.push(el);
-        } else incoming_relations.push([]);
-      });
+      incoming_relations = this.copy(incoming_relations_save, value); // Reset
+      // incoming_relations_save.forEach((el, i) => {
+      //   if (this.state.relations[i].checked) {
+      //     if (value < el.length) incoming_relations.push(el.slice(0, value));
+      //     else incoming_relations.push(el);
+      //   } else incoming_relations.push([]);
+      // });
 
-      outcoming_relations = []; // Reset
-      outcoming_relations_save.forEach((el, i) => {
-        if (this.state.relations[i].checked) {
-          if (value < el.length) outcoming_relations.push(el.slice(0, value));
-          else outcoming_relations.push(el);
-        } else outcoming_relations.push([]);
-      });
+      outcoming_relations = this.copy(outcoming_relations_save, value);
+      // outcoming_relations = []; // Reset
+      // outcoming_relations_save.forEach((el, i) => {
+      //   if (this.state.relations[i].checked) {
+      //     if (value < el.length) outcoming_relations.push(el.slice(0, value));
+      //     else outcoming_relations.push(el);
+      //   } else outcoming_relations.push([]);
+      // });
 
       this.setState({
         incoming_relations,
@@ -1021,8 +1022,54 @@ export default class Home extends Component {
     }
   }
 
+  copy(array_to_copy, limits) {
+    let { relations } = this.state;
+    let array = [];
+    array_to_copy.forEach((el, i) => {
+      if (relations[i].checked) {
+        if (limits < el.length) array.push(el.slice(0, limits));
+        else array.push(el);
+      } else array.push([]);
+    });
+
+    return array;
+  }
+
   handle_sort(value) {
-    this.setState({ sort_weight: value });
+    let {
+      outcoming_relations,
+      incoming_relations,
+      incoming_relations_save,
+      outcoming_relations_save,
+      limits
+    } = this.state;
+
+    outcoming_relations_save.forEach(el => {
+      el.sort((a, b) => {
+        // Sort
+        if (!value) return a.split(";")[1].localeCompare(b.split(";")[1]);
+        else return parseInt(b.split(";")[2]) - parseInt(a.split(";")[2]);
+      });
+    });
+
+    incoming_relations_save.forEach(el => {
+      el.sort((a, b) => {
+        // Sort
+        if (!value) return a.split(";")[1].localeCompare(b.split(";")[1]);
+        else return parseInt(b.split(";")[2]) - parseInt(a.split(";")[2]);
+      });
+    });
+
+    outcoming_relations = this.copy(outcoming_relations_save, parseInt(limits));
+    incoming_relations = this.copy(incoming_relations_save, parseInt(limits));
+    debugger
+    this.setState({
+      sort_weight: value,
+      outcoming_relations,
+      outcoming_relations_save,
+      incoming_relations,
+      incoming_relations_save
+    });
   }
 
   clear_search() {
