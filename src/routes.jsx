@@ -12,6 +12,10 @@ export default class Routes extends Component {
           path: '/',
           component: Home,
           exact: true
+        },
+        { 
+          path: '/search/:word',
+          component: Home
         }
       ]
     }
@@ -24,10 +28,8 @@ export default class Routes extends Component {
           <Route
             key={i}
             exact={route.exact}
-            path={route.pat}
-            render={props => (
-              <route.component {...props} routes={route.routes} />
-            )}
+            path={route.path}
+            component={route.component}
           />
         ))}
         <Route component={Home} /> {/* Default route */}

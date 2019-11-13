@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import cookie from "react-cookies";
 
 import Relation from "./Relation";
 
@@ -30,16 +31,22 @@ export default class Sidebar extends Component {
       this.relation_list.current.style.height = `${window.innerHeight -
         (this.relation_list.current.offsetTop + 100)}px`;
     });
+
+    let sort_weight = cookie.load("sort_weight")
+      ? JSON.parse(cookie.load("sort_weight"))
+      : true;
+    if (!sort_weight) this.switch();
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize");
+    // window.removeEventListener("resize");
   }
 
   switch() {
     let { sort_weight } = this.state;
+    sort_weight = !sort_weight;
 
-    if (sort_weight) {
+    if (!sort_weight) {
       this.switch_sort.current.textContent = "Tri alphabétique";
       this.switch_sort.current.classList.add("active");
     } else {
@@ -47,8 +54,9 @@ export default class Sidebar extends Component {
       this.switch_sort.current.classList.remove("active");
     }
 
-    this.setState({ sort_weight: !sort_weight });
-    this.state.handle_sort(!sort_weight);
+    cookie.save("sort_weight", sort_weight);
+    this.setState({ sort_weight });
+    this.state.handle_sort(sort_weight);
   }
 
   onChangeLimit(event) {

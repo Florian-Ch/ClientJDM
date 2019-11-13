@@ -6,10 +6,10 @@ export default class Navigation extends Component {
   lastCallTimer;
   constructor(props) {
     super(props);
+    let { params: {word} } = this.props
 
-    this.lastCall = 0;
     this.state = {
-      word: "",
+      word: word ? word : "",
       handler: props.handler,
       suggestions: [],
       clear: props.clear
@@ -21,6 +21,8 @@ export default class Navigation extends Component {
 
     // References
     this.input = React.createRef();
+    
+    if(word) this.onClick(true)
   }
 
   componentDidMount() {
@@ -30,12 +32,13 @@ export default class Navigation extends Component {
   }
 
   componentWillUnmount() {
-    this.input.current.removeEventListener("keyup");
+    // this.input.current.removeEventListener("keyup");
   }
 
-  async onClick() {
+  async onClick(start=false) {
     // Clear suggestions
-    this.setState({ suggestions: [] });
+    if(!start)
+      this.setState({ suggestions: [] });
     this.state.clear();
     // Get definitions
     this.state.handler(await API.getDefinitions(this.state.word));

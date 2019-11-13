@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Navigation from "./Navigation";
 import Sidebar from "./Sidebar";
+import { Link } from "react-router-dom"
 
 export default class Home extends Component {
   constructor(props) {
@@ -959,6 +960,10 @@ export default class Home extends Component {
     };
   }
 
+  componentDidUpdate() {
+    console.log(this.props.match.params)
+  }
+
   handle_updateRelation(index, bool) {
     let {
       relations,
@@ -1035,6 +1040,17 @@ export default class Home extends Component {
     return array;
   }
 
+  sort(array, sort_weight) {
+    array.forEach(el => {
+      el.sort((a, b) => {
+        // Sort
+        if (!sort_weight) return a.split(";")[1].localeCompare(b.split(";")[1]);
+        else return parseInt(b.split(";")[2]) - parseInt(a.split(";")[2]);
+      });
+    });
+    return array;
+  }
+
   handle_sort(value) {
     let {
       outcoming_relations,
@@ -1044,25 +1060,13 @@ export default class Home extends Component {
       limits
     } = this.state;
 
-    outcoming_relations_save.forEach(el => {
-      el.sort((a, b) => {
-        // Sort
-        if (!value) return a.split(";")[1].localeCompare(b.split(";")[1]);
-        else return parseInt(b.split(";")[2]) - parseInt(a.split(";")[2]);
-      });
-    });
-
-    incoming_relations_save.forEach(el => {
-      el.sort((a, b) => {
-        // Sort
-        if (!value) return a.split(";")[1].localeCompare(b.split(";")[1]);
-        else return parseInt(b.split(";")[2]) - parseInt(a.split(";")[2]);
-      });
-    });
-
+    // Sort
+    outcoming_relations_save = this.sort(outcoming_relations_save, value);
+    incoming_relations_save = this.sort(incoming_relations_save, value);
+    // Copy
     outcoming_relations = this.copy(outcoming_relations_save, parseInt(limits));
     incoming_relations = this.copy(incoming_relations_save, parseInt(limits));
-    debugger
+
     this.setState({
       sort_weight: value,
       outcoming_relations,
@@ -1090,13 +1094,23 @@ export default class Home extends Component {
         outcoming_relations,
         incoming_relations,
         incoming_relations_save,
-        outcoming_relations_save
+        outcoming_relations_save,
+        limits,
+        sort_weight
       } = this.state;
       outcoming_relations_save.push(res.outcoming_relations);
       incoming_relations_save.push(res.incoming_relations);
 
-      outcoming_relations.push(res.outcoming_relations);
-      incoming_relations.push(res.incoming_relations);
+      // Sort
+      outcoming_relations_save = this.sort(outcoming_relations_save, sort_weight);
+      incoming_relations_save = this.sort(incoming_relations_save, sort_weight);
+      // Copy
+      outcoming_relations = this.copy(
+        outcoming_relations_save,
+        parseInt(limits)
+      );
+      incoming_relations = this.copy(incoming_relations_save, parseInt(limits));
+      
       this.setState({
         outcoming_relations,
         incoming_relations,
@@ -1114,6 +1128,7 @@ export default class Home extends Component {
           limits={this.state.limits}
           handler={this.handle_search}
           clear={this.clear_search}
+          params={this.props.match.params}
         />
         <div className="main">
           <Sidebar
@@ -1127,8 +1142,8 @@ export default class Home extends Component {
               <div>
                 <h3>Définitions : </h3>
                 <ul>
-                  {this.state.definitions.map(def => (
-                    <li>{def}</li>
+                  {this.state.definitions.map((def, i) => (
+                    <li key={i}>{def}</li>
                   ))}
                 </ul>
               </div>
@@ -1136,7 +1151,7 @@ export default class Home extends Component {
                 <h3>Relations sortantes</h3>
                 <ul>
                   {this.state.outcoming_relations.map(rel =>
-                    rel.map(el => <li>{el}</li>)
+                    rel.map((el, i) => <li key={i}><a href={`/search/${el.split(';')[1]}`}>{el}</a></li>)
                   )}
                 </ul>
               </div>
@@ -1144,7 +1159,7 @@ export default class Home extends Component {
                 <h3>Relations entrantes</h3>
                 <ul>
                   {this.state.incoming_relations.map(rel =>
-                    rel.map(el => <li>{el}</li>)
+                    rel.map((el, i) => <li key={i}>{el}</li>)
                   )}
                 </ul>
               </div>
