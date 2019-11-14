@@ -32,14 +32,20 @@ export default class Sidebar extends Component {
         (this.relation_list.current.offsetTop + 100)}px`;
     });
 
+    // Check if in cookies there is a user preference
     let sort_weight = cookie.load("sort_weight")
       ? JSON.parse(cookie.load("sort_weight"))
       : true;
     if (!sort_weight) this.switch();
+
+    let limits = cookie.load("limits")
+      ? JSON.parse(cookie.load("limits"))
+      : null;
+    if (limits) this.onChangeLimit({ target: { value: limits } });
   }
 
   componentWillUnmount() {
-    // window.removeEventListener("resize");
+    window.removeEventListener("resize");
   }
 
   switch() {
@@ -54,7 +60,7 @@ export default class Sidebar extends Component {
       this.switch_sort.current.classList.remove("active");
     }
 
-    cookie.save("sort_weight", sort_weight);
+    cookie.save("sort_weight", sort_weight, { path: "/" });
     this.setState({ sort_weight });
     this.state.handle_sort(sort_weight);
   }
@@ -63,6 +69,8 @@ export default class Sidebar extends Component {
     let { value } = event.target;
     this.setState({ limits: value });
     this.state.handle_limit(value);
+
+    cookie.save("limits", value, { path: "/" }); // Save the limit value in cookies
   }
 
   render() {

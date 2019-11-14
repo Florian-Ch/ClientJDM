@@ -960,10 +960,6 @@ export default class Home extends Component {
     };
   }
 
-  componentDidUpdate() {
-    console.log(this.props.match.params)
-  }
-
   handle_updateRelation(index, bool) {
     let {
       relations,

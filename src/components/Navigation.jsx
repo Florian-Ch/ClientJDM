@@ -32,7 +32,7 @@ export default class Navigation extends Component {
   }
 
   componentWillUnmount() {
-    // this.input.current.removeEventListener("keyup");
+    this.input.current.removeEventListener("keyup");
   }
 
   async onClick(start=false) {
@@ -45,14 +45,14 @@ export default class Navigation extends Component {
     // Get relations
     for (let i = 0; i < this.props.relations.length; i++) {
       const rel = this.props.relations[i];
-      if (rel.checked) {
+      // if (rel.checked) {
         let data = await API.getRelations(
           this.state.word,
           rel.id,
           this.props.limits
         );
         this.state.handler(data);
-      }
+      // }
     }
   }
 
