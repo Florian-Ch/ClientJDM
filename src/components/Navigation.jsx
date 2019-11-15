@@ -6,13 +6,17 @@ export default class Navigation extends Component {
   lastCallTimer;
   constructor(props) {
     super(props);
-    let { params: {word} } = this.props
+    let {
+      params: { word }
+    } = this.props;
 
     this.state = {
       word: word ? word : "",
       handler: props.handler,
       suggestions: [],
-      clear: props.clear
+      clear: props.clear,
+      controller: null,
+      requests: []
     };
     // Bind
     this.updateInputValue = this.updateInputValue.bind(this);
@@ -21,8 +25,8 @@ export default class Navigation extends Component {
 
     // References
     this.input = React.createRef();
-    
-    if(word) this.onClick(true)
+
+    if (word) this.onClick(true);
   }
 
   componentDidMount() {
@@ -35,23 +39,43 @@ export default class Navigation extends Component {
     this.input.current.removeEventListener("keyup");
   }
 
-  async onClick(start=false) {
+  async onClick(start = false) {
+    let { requests, controller } = this.state;
+
+    // Check if all precedent requests are finished
+    if (controller) {
+      let all_request_ended = true;
+      requests.forEach(req => {
+        if (!req) all_request_ended = false;
+      });
+      if (!all_request_ended) controller.abort()
+    }
+    
+    // Set a new controller
+    controller = new AbortController();
+    this.setState({ controller })
+    let signal = controller.signal
+
     // Clear suggestions
-    if(!start)
-      this.setState({ suggestions: [] });
+    if (!start) this.setState({ suggestions: [] });
     this.state.clear();
     // Get definitions
-    this.state.handler(await API.getDefinitions(this.state.word));
+    this.state.handler(await API.getDefinitions(this.state.word, signal));
+
     // Get relations
     for (let i = 0; i < this.props.relations.length; i++) {
       const rel = this.props.relations[i];
       // if (rel.checked) {
-        let data = await API.getRelations(
-          this.state.word,
-          rel.id,
-          this.props.limits
-        );
-        this.state.handler(data);
+      requests.push(false);
+      let data = await API.getRelations(
+        this.state.word,
+        rel.id,
+        signal,
+        this.props.limits
+      );
+
+      requests[i] = true;
+      this.state.handler(data);
       // }
     }
   }
