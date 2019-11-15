@@ -16,6 +16,7 @@ export default class Home extends Component {
 
     // State
     this.state = {
+      search: false,
       limits: "",
       sort_weight: false,
       outcoming_relations_save: [],
@@ -1075,7 +1076,9 @@ export default class Home extends Component {
   clear_search() {
     this.setState({
       outcoming_relations: [],
+      outcoming_relations_save: [],
       incoming_relations: [],
+      incoming_relations_save: [],
       definitions: []
     });
   }
@@ -1111,12 +1114,14 @@ export default class Home extends Component {
         outcoming_relations,
         incoming_relations,
         outcoming_relations_save,
-        incoming_relations_save
+        incoming_relations_save,
+        search: true
       });
     }
   }
 
   render() {
+    let { search, definitions, outcoming_relations, incoming_relations } = this.state
     return (
       <div>
         <Navigation
@@ -1134,32 +1139,41 @@ export default class Home extends Component {
             handle_updateRelation={this.handle_updateRelation}
           />
           <div className="main-container">
-            <div className="col">
+            {search ? (
               <div>
-                <h3>Définitions : </h3>
-                <ul>
-                  {this.state.definitions.map((def, i) => (
-                    <li key={i}>{def}</li>
-                  ))}
-                </ul>
+                <div className="card">
+                  <h3>Définitions : </h3>
+                  <ul className="definitions">
+                    {definitions.length > 0 ? definitions.map((def, i) => (
+                      <li key={i}>{def}</li>
+                    )) : <h4 className="not-found">Aucune définitions trouvées</h4>}
+                  </ul>
+                </div>
+                <div>
+                <div className="card">
+                  <h3>Relations sortantes</h3>
+                  <ul>
+                    {outcoming_relations.map(rel =>
+                      rel.map((el, i) => <li key={i}><a href={`/search/${el.split(';')[1]}`}>{el}</a></li>)
+                    )}
+                  </ul>
+                </div>
+                <div className="card">
+                  <h3>Relations entrantes</h3>
+                  <ul>
+                    {incoming_relations.map(rel =>
+                      rel.map((el, i) => <li key={i}>{el}</li>)
+                    )}
+                  </ul>
+                </div>
+
+                </div>
               </div>
-              <div>
-                <h3>Relations sortantes</h3>
-                <ul>
-                  {this.state.outcoming_relations.map(rel =>
-                    rel.map((el, i) => <li key={i}><a href={`/search/${el.split(';')[1]}`}>{el}</a></li>)
-                  )}
-                </ul>
+            ) : (
+              <div className="waiting-request">
+                <h3>Attente d'une requête.</h3>
               </div>
-              <div>
-                <h3>Relations entrantes</h3>
-                <ul>
-                  {this.state.incoming_relations.map(rel =>
-                    rel.map((el, i) => <li key={i}>{el}</li>)
-                  )}
-                </ul>
-              </div>
-            </div>
+            ) }
           </div>
         </div>
       </div>
