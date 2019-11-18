@@ -1123,19 +1123,20 @@ export default class Home extends Component {
   }
 
   render_relations(rel, index_relation) {
-    let { relations } = this.state
-    return (
-      relations[index_relation].checked ? <li className="relation-content" key={index_relation}>
+    let { relations } = this.state;
+    return relations[index_relation].checked && rel.length > 0 ? (
+      <li className="relation-content" key={index_relation}>
         <h4>Relation: {relations[index_relation].name.slice(2)}</h4>
         <ul className="relation-ul">
-          {rel.length > 0 ?rel.map((el, i) => (
+          {rel.map((el, i) => (
             <li key={i}>
               <a href={`/search/${el.split(";")[1]}`}>{el}</a>
             </li>
-          )) : 
-          <p>Il n'y a aucune informations pour cette relation</p>}
+          ))}
         </ul>
-      </li> : false
+      </li>
+    ) : (
+      false
     );
   }
 
@@ -1187,13 +1188,16 @@ export default class Home extends Component {
                   <div className="card">
                     <h3>Relations entrantes</h3>
                     <ul>
-                      {incoming_relations.map(rel =>
+                      {incoming_relations.map((rel, i) => {
+                        return this.render_relations(rel, i);
+                      })}
+                      {/* {incoming_relations.map(rel =>
                         rel.map((el, i) => (
                           <li key={i}>
                             <a href={`/search/${el.split(";")[1]}`}>{el}</a>
                           </li>
                         ))
-                      )}
+                      )} */}
                     </ul>
                   </div>
                 </div>
