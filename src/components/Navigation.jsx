@@ -25,11 +25,12 @@ export default class Navigation extends Component {
 
     // References
     this.input = React.createRef();
-
-    if (word) this.onClick(true);
   }
 
   componentDidMount() {
+    let { word } = this.state
+    if (word) this.onClick();
+
     this.input.current.addEventListener("keyup", event => {
       if (this.state.word !== "" && event.key === "Enter") this.onClick();
     });
@@ -39,7 +40,7 @@ export default class Navigation extends Component {
     this.input.current.removeEventListener("keyup");
   }
 
-  async onClick(start = false) {
+  async onClick() {
     let { requests, controller } = this.state;
 
     // Check if all precedent requests are finished
@@ -57,7 +58,8 @@ export default class Navigation extends Component {
     let signal = controller.signal
 
     // Clear suggestions
-    if (!start) this.setState({ suggestions: [] });
+    this.setState({ suggestions: [] });
+    
     this.state.clear();
     // Get definitions
     this.state.handler(await API.getDefinitions(this.state.word, signal));
