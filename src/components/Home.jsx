@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Navigation from "./Navigation";
 import Sidebar from "./Sidebar";
-import { Link } from "react-router-dom"
 
 export default class Home extends Component {
   constructor(props) {
@@ -1101,7 +1100,10 @@ export default class Home extends Component {
       incoming_relations_save.push(res.incoming_relations);
 
       // Sort
-      outcoming_relations_save = this.sort(outcoming_relations_save, sort_weight);
+      outcoming_relations_save = this.sort(
+        outcoming_relations_save,
+        sort_weight
+      );
       incoming_relations_save = this.sort(incoming_relations_save, sort_weight);
       // Copy
       outcoming_relations = this.copy(
@@ -1109,7 +1111,7 @@ export default class Home extends Component {
         parseInt(limits)
       );
       incoming_relations = this.copy(incoming_relations_save, parseInt(limits));
-      
+
       this.setState({
         outcoming_relations,
         incoming_relations,
@@ -1120,8 +1122,30 @@ export default class Home extends Component {
     }
   }
 
+  render_relations(rel, index_relation) {
+    let { relations } = this.state
+    return (
+      relations[index_relation].checked ? <li className="relation-content" key={index_relation}>
+        <h4>Relation: {relations[index_relation].name.slice(2)}</h4>
+        <ul className="relation-ul">
+          {rel.length > 0 ?rel.map((el, i) => (
+            <li key={i}>
+              <a href={`/search/${el.split(";")[1]}`}>{el}</a>
+            </li>
+          )) : 
+          <p>Il n'y a aucune informations pour cette relation</p>}
+        </ul>
+      </li> : false
+    );
+  }
+
   render() {
-    let { search, definitions, outcoming_relations, incoming_relations } = this.state
+    let {
+      search,
+      definitions,
+      outcoming_relations,
+      incoming_relations
+    } = this.state;
     return (
       <div>
         <Navigation
@@ -1144,36 +1168,41 @@ export default class Home extends Component {
                 <div className="card">
                   <h3>Définitions : </h3>
                   <ul className="definitions">
-                    {definitions.length > 0 ? definitions.map((def, i) => (
-                      <li key={i}>{def}</li>
-                    )) : <h4 className="not-found">Aucune définitions trouvées</h4>}
+                    {definitions.length > 0 ? (
+                      definitions.map((def, i) => <li key={i}>{def}</li>)
+                    ) : (
+                      <h4 className="not-found">Aucune définitions trouvées</h4>
+                    )}
                   </ul>
                 </div>
                 <div>
-                <div className="card">
-                  <h3>Relations sortantes</h3>
-                  <ul>
-                    {outcoming_relations.map(rel =>
-                      rel.map((el, i) => <li key={i}><a href={`/search/${el.split(';')[1]}`}>{el}</a></li>)
-                    )}
-                  </ul>
-                </div>
-                <div className="card">
-                  <h3>Relations entrantes</h3>
-                  <ul>
-                    {incoming_relations.map(rel =>
-                      rel.map((el, i) => <li key={i}>{el}</li>)
-                    )}
-                  </ul>
-                </div>
-
+                  <div className="card">
+                    <h3>Relations sortantes</h3>
+                    <ul>
+                      {outcoming_relations.map((rel, i) => {
+                        return this.render_relations(rel, i);
+                      })}
+                    </ul>
+                  </div>
+                  <div className="card">
+                    <h3>Relations entrantes</h3>
+                    <ul>
+                      {incoming_relations.map(rel =>
+                        rel.map((el, i) => (
+                          <li key={i}>
+                            <a href={`/search/${el.split(";")[1]}`}>{el}</a>
+                          </li>
+                        ))
+                      )}
+                    </ul>
+                  </div>
                 </div>
               </div>
             ) : (
               <div className="waiting-request">
                 <h3>Attente d'une requête.</h3>
               </div>
-            ) }
+            )}
           </div>
         </div>
       </div>
