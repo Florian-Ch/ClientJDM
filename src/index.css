@@ -99,6 +99,12 @@ body {
   /* overflow: hidden; */
 }
 
+@media screen and (max-width: 1024px) {
+  .main {
+    flex-direction: column;
+  }
+}
+
 .main-container {
   flex: 1;
   background-color: #3a4556;
@@ -136,6 +142,11 @@ body {
 }
 
 /* ------------ SIDEBAR ------------ */
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .sidebar {
   position: -webkit-sticky;
   /* Safari */
@@ -150,6 +161,20 @@ body {
   border: none;
   box-shadow: 2px 2px 2px #0000007a;
 }
+
+.btn.btn-option {
+  margin: 10px;
+  border-radius: 0;
+  background: #2aa3cc;  
+}
+.btn.btn-option:hover {
+  background-color: #64c0df;
+}
+
+.btn.btn-option.hidden {
+  display: none;
+}
+
 
 .limits span#limits-input,
 .limits input.form-control {
@@ -187,8 +212,13 @@ body {
 .options {
   display: flex;
   flex-direction: column;
-  max-width: 300px;
 }
+
+@media screen and (min-width: 1025px) {
+  .options {
+    max-width: 300px;
+  }
+} 
 
 .options>div {
   margin: 5px;

@@ -13,23 +13,32 @@ export default class Sidebar extends Component {
       relations: props.relations,
       handle_limit: props.handle_limit,
       handle_sort: props.handle_sort,
-      handle_updateRelation: props.handle_updateRelation
+      handle_updateRelation: props.handle_updateRelation,
+      collapse: false
     };
 
     // References
     this.switch_sort = React.createRef();
     this.relation_list = React.createRef();
+    this.sidebar = React.createRef();
+    this.btnOption = React.createRef();
     // Bind
+    this.clickCollapse = this.clickCollapse.bind(this);
     this.switch = this.switch.bind(this);
     this.onChangeLimit = this.onChangeLimit.bind(this);
+    this.checkCollapse = this.checkCollapse.bind(this);
   }
 
   componentDidMount() {
     this.relation_list.current.style.height = `${window.innerHeight -
       (this.relation_list.current.offsetTop + 100)}px`;
+    this.checkCollapse();
+
     window.addEventListener("resize", () => {
       this.relation_list.current.style.height = `${window.innerHeight -
         (this.relation_list.current.offsetTop + 100)}px`;
+
+      this.checkCollapse();
     });
 
     // Check if in cookies there is a user preference
@@ -42,6 +51,21 @@ export default class Sidebar extends Component {
       ? JSON.parse(cookie.load("limits"))
       : null;
     if (limits) this.onChangeLimit({ target: { value: limits } });
+  }
+
+  checkCollapse() {
+    let { collapse } = this.state
+    if (window.innerWidth <= 1024) {
+      collapse = true
+      this.btnOption.current.classList.remove("hidden");
+      this.sidebar.current.classList.remove("show");
+    } else {
+      collapse = false
+      this.btnOption.current.classList.add("hidden");
+      this.sidebar.current.classList.add("show");
+    }
+    
+    this.setState({collapse})
   }
 
   componentWillUnmount() {
@@ -73,51 +97,70 @@ export default class Sidebar extends Component {
     cookie.save("limits", value, { path: "/" }); // Save the limit value in cookies
   }
 
+  clickCollapse() {
+    let { collapse } = this.state
+
+    if (collapse) this.sidebar.current.classList.add("show");
+    else this.sidebar.current.classList.remove("show");
+
+    this.setState({ collapse: !collapse });
+  }
+
   render() {
     return (
-      <div className="sidebar">
-        <h3>Options :</h3>
-        <div className="options">
-          <div className="limits">
-            <div className="input-group">
-              <div className="input-group-prepend">
-                <span className="input-group-text" id="limits-input">
-                  Nombre d'entrées à afficher
-                </span>
-              </div>
-              <input
-                type="number"
-                className="form-control"
-                value={this.state.limits}
-                onChange={this.onChangeLimit}
-              />
-            </div>
-          </div>
-
-          <div className="sorts">
-            <div className="btn-group-toggle">
-              <label
-                className="btn btn-secondary"
-                onClick={this.switch}
-                ref={this.switch_sort}
-              >
-                <input type="checkbox" /> Tri par poids
-              </label>
-            </div>
-          </div>
-
-          <div className="relations">
-            <h4 className="relations-title">Relations à afficher</h4>
-            <div className="relations-list" ref={this.relation_list}>
-              {this.state.relations.map((r, i) => (
-                <Relation
-                  key={i}
-                  index={i}
-                  name={r.name}
-                  title={r.title}
-                  handler={this.state.handle_updateRelation}
+      <div className="sidebar-container">
+        <button
+          className="btn btn-option hidden"
+          type="button"
+          onClick={this.clickCollapse}
+          ref={this.btnOption}
+        >
+          Options
+        </button>
+        <div className="sidebar collapse show" id="sidebar" ref={this.sidebar}>
+          <h3>Options :</h3>
+          <div className="options">
+            <div className="limits">
+              <div className="input-group">
+                <div className="input-group-prepend">
+                  <span className="input-group-text" id="limits-input">
+                    Nombre d'entrées à afficher
+                  </span>
+                </div>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={this.state.limits}
+                  onChange={this.onChangeLimit}
                 />
-              ))}
+              </div>
+            </div>
+
+            <div className="sorts">
+              <div className="btn-group-toggle">
+                <label
+                  className="btn btn-secondary"
+                  onClick={this.switch}
+                  ref={this.switch_sort}
+                >
+                  <input type="checkbox" /> Tri par poids
+                </label>
+              </div>
+            </div>
+
+            <div className="relations">
+              <h4 className="relations-title">Relations à afficher</h4>
+              <div className="relations-list" ref={this.relation_list}>
+                {this.state.relations.map((r, i) => (
+                  <Relation
+                    key={i}
+                    index={i}
+                    name={r.name}
+                    title={r.title}
+                    handler={this.state.handle_updateRelation}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
